@@ -1,7 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar
+        @mousedown="mouseDownToolbar($event)"
+        @mouseup="mouseUpToolbar($event)"
+        @mousemove="moveWindow($event)"
+      >
         <q-btn
           flat
           dense
@@ -15,7 +19,14 @@
           Quasar App
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          flat
+          dense
+          round
+          icon="close"
+          aria-label="Close"
+          @click="exitApplication()"
+        />
       </q-toolbar>
     </q-header>
 
@@ -48,6 +59,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { exit } from '@tauri-apps/api/process';
+import { appWindow, PhysicalPosition } from '@tauri-apps/api/window';
+import { E } from 'app/dist/spa/assets/index.d8e3e4c6';
 
 const essentialLinks: EssentialLinkProps[] = [
   {
@@ -96,7 +110,33 @@ const essentialLinks: EssentialLinkProps[] = [
 
 const leftDrawerOpen = ref(false)
 
+var moveWindowToggle = false;
+var clickOffsetPosition = {x:0, y:0};
+
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+function exitApplication() {
+  exit(1);
+}
+
+function mouseDownToolbar(event: MouseEvent) {
+  console.log('Mouse down');
+  clickOffsetPosition.x = event.x;
+  clickOffsetPosition.y = event.y;
+  moveWindowToggle = true;
+  
+}
+
+function mouseUpToolbar(event: MouseEvent) {
+  console.log('Mouse up');
+  moveWindowToggle = false;
+}
+
+function moveWindow(event: MouseEvent) {
+  if(!moveWindowToggle) return;
+  appWindow.setPosition(new PhysicalPosition(event.screenX-clickOffsetPosition.x, event.screenY-clickOffsetPosition.y));
+  //console.log("Position:", event.pageX, event.pageY);
 }
 </script>

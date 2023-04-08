@@ -4,7 +4,7 @@
     "beforeBuildCommand": "cd src-ui && npm run build",
     "beforeDevCommand": "cd src-ui && npm run dev",
     "devPath": "http://localhost:9000/",
-    "distDir": "../src-ui"
+    "distDir": "../src-ui/dist/spa"
   },
   "package": {
     "productName": "Tauri-App",
@@ -12,7 +12,7 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": true
     },
     "bundle": {
       "active": true,
@@ -29,7 +29,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.nicostibbe.tauri-app",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -59,7 +59,8 @@
         "height": 600,
         "resizable": true,
         "title": "Tauri-App",
-        "width": 800
+        "width": 800,
+        "decorations": false
       }
     ]
   }

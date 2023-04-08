@@ -6,6 +6,7 @@
       :todos="todos"
       :meta="meta"
     ></example-component>
+    <q-btn color="primary" label="Test" @click="$event => openGoogle()"/>
   </q-page>
 </template>
 
@@ -13,6 +14,8 @@
 import { Todo, Meta } from 'components/models';
 import ExampleComponent from 'components/ExampleComponent.vue';
 import { ref } from 'vue';
+import { getName } from "@tauri-apps/api/app"
+import { appWindow, WebviewWindow } from "@tauri-apps/api/window"
 
 const todos = ref<Todo[]>([
   {
@@ -39,4 +42,22 @@ const todos = ref<Todo[]>([
 const meta = ref<Meta>({
   totalCount: 1200
 });
+
+getName().then((name) => {
+  console.log("Application name:", name);
+})
+
+function centerWindow() {
+  appWindow.center();
+}
+
+function openGoogle() {
+  const webview = new WebviewWindow(Math.random().toString(36).substring(7), {
+    url:window.location.href,
+    title:"Google"
+  });
+  webview.once("tauri://created", function() {
+    console.log("Webview created!")
+  });
+}
 </script>
