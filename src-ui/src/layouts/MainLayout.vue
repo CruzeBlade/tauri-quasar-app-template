@@ -1,12 +1,12 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpR fFf">
     <q-header elevated>
       <q-toolbar
+        class="q-py-none q-px-sm"
         @mousedown="mouseDownToolbar($event)"
-        @mouseup="mouseUpToolbar($event)"
-        @mousemove="moveWindow($event)"
       >
         <q-btn
+          size="xs"
           flat
           dense
           round
@@ -20,6 +20,7 @@
         </q-toolbar-title>
 
         <q-btn
+          size="xs"
           flat
           dense
           round
@@ -61,7 +62,6 @@ import { ref } from 'vue';
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 import { exit } from '@tauri-apps/api/process';
 import { appWindow, PhysicalPosition } from '@tauri-apps/api/window';
-import { E } from 'app/dist/spa/assets/index.d8e3e4c6';
 
 const essentialLinks: EssentialLinkProps[] = [
   {
@@ -110,7 +110,6 @@ const essentialLinks: EssentialLinkProps[] = [
 
 const leftDrawerOpen = ref(false)
 
-var moveWindowToggle = false;
 var clickOffsetPosition = {x:0, y:0};
 
 function toggleLeftDrawer() {
@@ -125,18 +124,13 @@ function mouseDownToolbar(event: MouseEvent) {
   console.log('Mouse down');
   clickOffsetPosition.x = event.x;
   clickOffsetPosition.y = event.y;
-  moveWindowToggle = true;
-  
-}
-
-function mouseUpToolbar(event: MouseEvent) {
-  console.log('Mouse up');
-  moveWindowToggle = false;
+  window.addEventListener("mousemove", moveWindow);
+  window.addEventListener("mouseup", () => {
+    window.removeEventListener("mousemove", moveWindow);
+  });
 }
 
 function moveWindow(event: MouseEvent) {
-  if(!moveWindowToggle) return;
   appWindow.setPosition(new PhysicalPosition(event.screenX-clickOffsetPosition.x, event.screenY-clickOffsetPosition.y));
-  //console.log("Position:", event.pageX, event.pageY);
 }
 </script>
