@@ -1,9 +1,9 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
-    "devPath": "../src-ui",
+    "beforeBuildCommand": "cd src-ui && npm run build",
+    "beforeDevCommand": "cd src-ui && npm run dev",
+    "devPath": "http://localhost:9000/",
     "distDir": "../src-ui"
   },
   "package": {
